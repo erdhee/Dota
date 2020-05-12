@@ -8,6 +8,8 @@ target 'Dota' do
   pod 'RxSwift', '~> 5'
   pod 'RxCocoa', '~> 5'
   pod 'RealmSwift'
+  pod 'SwiftLint'
+  pod "RxRealm"
 
   # Pods for Dota
 
