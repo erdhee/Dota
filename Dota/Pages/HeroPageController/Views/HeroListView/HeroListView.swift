@@ -13,6 +13,10 @@ import RxDataSources
 import RxSwift
 import RxCocoa
 
+protocol HeroListViewOutput: class {
+    func didSelectHero(hero: HeroObject?)
+}
+
 class HeroListView: BaseView {
     
     // IBOutlets
@@ -25,6 +29,7 @@ class HeroListView: BaseView {
     private let disposeBag: DisposeBag = DisposeBag()
     private let cellIdentifier = "heroCellIdentifier"
     private var datasource: RxCollectionViewSectionedAnimatedDataSource<SectionHeroCollectionData>!
+    weak var output: HeroListViewOutput?
     var viewModel: HeroListViewModel = HeroListViewModel() {
         didSet {
             setupSegmentControl()
@@ -106,7 +111,18 @@ extension HeroListView: UICollectionViewDelegateFlowLayout {
         let flowayout = collectionViewLayout as? UICollectionViewFlowLayout
         let space: CGFloat = (flowayout?.minimumInteritemSpacing ?? 0.0) + (flowayout?.sectionInset.left ?? 0.0) + (flowayout?.sectionInset.right ?? 0.0)
         let size: CGFloat = (collectionView.frame.size.width - space) / 2.0
+        var height = size
+        
+        if (height < 164) {
+            height = height + (height * 0.1)
+        }
 
-        return CGSize(width: size, height: (size + (size * 0.1)))
+        return CGSize(width: size, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item: HeroCollectionCellViewData = datasource[indexPath]
+        
+        output?.didSelectHero(hero: item.heroObject)
     }
 }

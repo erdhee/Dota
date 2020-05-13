@@ -67,13 +67,15 @@ class HeroDataService {
      * - [HeroObject]
      */
     
-    public func getSimilarHero(attribute: HeroAttributeType) -> [HeroObject] {
-        return realm.objects(HeroObject.self).filter { (hero) -> Bool in
-            guard let type = hero.getAttributeType() else { return false }
-            return type == attribute
+    public func getSimilarHero(hero: HeroObject) -> [HeroObject] {
+        guard let heroType = hero.getAttributeType() else { return [] }
+        
+        return realm.objects(HeroObject.self).filter { (_hero) -> Bool in
+            guard let type = _hero.getAttributeType() else { return false }
+            return type == heroType && _hero.name != hero.name
         }
         .sorted { (firstHero, secondHero) -> Bool in
-            switch (attribute) {
+            switch (heroType) {
             case .agi:
                 return firstHero.moveSpeed > secondHero.moveSpeed
             case .str:

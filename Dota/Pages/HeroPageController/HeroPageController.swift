@@ -18,6 +18,7 @@ class HeroPageController: UIViewController {
     // Variables
     
     var viewModel: HeroPageViewModel!
+    weak var listOutput: HeroListViewOutput?
     private let disposeBag = DisposeBag()
     private let loadingView = HeroListLoadingView()
     private let errorView = HeroListErrorView()
@@ -39,6 +40,7 @@ class HeroPageController: UIViewController {
     
     private func setupChildView() {
         listView.viewModel = HeroListViewModel()
+        listView.output = listOutput
         errorView.output = self
     }
     
