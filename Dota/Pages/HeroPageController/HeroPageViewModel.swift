@@ -21,13 +21,16 @@ class HeroPageViewModel {
     
     init() {
         // Fetch local heroes first to pre-fill data
-        let localHeroes = HeroDataService.shared.get(role: nil)
-        
-        if (localHeroes.count > 0) {
-            hasData.onNext(true)
-        }
-        
-        reload()
+        HeroDataService.shared
+            .get(role: nil)
+            .subscribe(onNext: { [weak self] (heroes) in
+                if (heroes.count > 0) {
+                    self?.hasData.onNext(true)
+                }
+                
+                self?.reload()
+            })
+            .dispose()
     }
     
     func reload() {
@@ -47,7 +50,14 @@ class HeroPageViewModel {
         .subscribe(onSuccess: { [weak self] (heroes) in
             self?.hasData.onNext(heroes.count > 0)
         }) { [weak self] (error) in
-            self?.error.onNext(ErrorHelper.shared.getMessage(error: error))
+            if let error = error as? MoyaError {
+                switch (error) {
+                case .underlying(let nsError as NSError, _):
+                    self?.error.onNext(ErrorHelper.shared.getMessage(error: nsError))
+                default:
+                    self?.error.onNext(ErrorHelper.shared.getMessage(error: error))
+                }
+            }
         }
     .disposed(by: disposeBag)
     }

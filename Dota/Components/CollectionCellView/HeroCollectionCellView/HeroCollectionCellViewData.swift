@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxDataSources
 
 class HeroCollectionCellViewData {
     var imageUrl: URL?
@@ -22,4 +23,22 @@ class HeroCollectionCellViewData {
         heroRole = hero.roles.map({ $0.name ?? "" }).joined(separator: ", ")
         heroAttribute = hero.getAttributeType()
     }
+    
+    func getIdentifier() -> String {
+        return heroObject?.name ?? ""
+    }
+}
+
+extension HeroCollectionCellViewData: IdentifiableType, Equatable {
+    
+    typealias Identity = String
+    
+    var identity: String {
+        return self.getIdentifier()
+    }
+    
+    static func ==(lhs: HeroCollectionCellViewData, rhs: HeroCollectionCellViewData) -> Bool {
+        return lhs.getIdentifier() == rhs.getIdentifier()
+    }
+    
 }

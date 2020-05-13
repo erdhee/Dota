@@ -16,27 +16,29 @@ class HeroListViewModel {
     
     private let disposeBag = DisposeBag()
     var segmentItems: BehaviorSubject<[SegmentItemData]> = BehaviorSubject<[SegmentItemData]>(value: [])
-    var collectionItems: BehaviorSubject<[HeroCollectionCellViewData]> = BehaviorSubject<[HeroCollectionCellViewData]>(value: [])
+    var collectionItems: BehaviorSubject<[SectionHeroCollectionData]> = BehaviorSubject<[SectionHeroCollectionData]>(value: [])
     var role: BehaviorSubject<SegmentItemData>!
     
     init() {
-        var _segmentItems: [SegmentItemData] = [];
         let defaultSegmentItem = SegmentItemData(label: "All Heroes")
         
         role = BehaviorSubject<SegmentItemData>(value: defaultSegmentItem)
         
-        _segmentItems.append(defaultSegmentItem)
-        _segmentItems.append(contentsOf: RoleDataService.shared.get().map({ (role) -> SegmentItemData in
-            return SegmentItemData(label: role.name ?? "", model: role)
-        }))
-        
-        segmentItems.onNext(_segmentItems)
+        RoleDataService.shared
+            .get()
+            .map { (roles) -> [SegmentItemData] in
+                var segmentItems: [SegmentItemData] = [defaultSegmentItem]
+                
+                segmentItems.append(contentsOf: roles.map({ SegmentItemData(label: $0.name ?? "", model: $0) }))
+
+                return segmentItems
+            }
+            .bind(to: segmentItems)
+            .disposed(by: disposeBag)
         
         role.asObservable()
-            .map { (segment) -> RoleObject? in
-                return segment.model
-            }
-            .map { (role) -> [HeroObject] in
+            .map({ $0.model })
+            .flatMap { (role) -> Observable<[HeroObject]> in
                 return HeroDataService.shared.get(role: role)
             }
             .map({ (heroes) -> [HeroCollectionCellViewData] in
@@ -44,9 +46,10 @@ class HeroListViewModel {
                     return HeroCollectionCellViewData(hero: hero)
                 }
             })
-            .subscribe(onNext: { [weak self] (heroes) in
-                self?.collectionItems.onNext(heroes)
-            })
+            .map { (heroes) -> [SectionHeroCollectionData] in
+                return [SectionHeroCollectionData(header: "", items: heroes)]
+            }
+            .bind(to: collectionItems)
             .disposed(by: disposeBag)
     }
     
@@ -61,4 +64,23 @@ class HeroListViewModel {
 struct SegmentItemData {
     var label: String
     var model: RoleObject?
+}
+
+struct SectionHeroCollectionData {
+    var header: String
+    var items: [Item]
+}
+
+extension SectionHeroCollectionData: AnimatableSectionModelType {
+    typealias Identity = String
+    typealias Item = HeroCollectionCellViewData
+    
+    init(original: SectionHeroCollectionData, items: [Item]) {
+        self = original
+        self.items = items
+    }
+    
+    var identity: String {
+        return "Hero"
+    }
 }

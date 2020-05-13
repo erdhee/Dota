@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Segmentio
+import RxDataSources
 import RxSwift
 import RxCocoa
 
@@ -20,29 +21,37 @@ class HeroListView: BaseView {
     @IBOutlet var collectionView: UICollectionView!
     
     // Variables
-    
-    var viewModel: HeroListViewModel = HeroListViewModel()
+
     private let disposeBag: DisposeBag = DisposeBag()
     private let cellIdentifier = "heroCellIdentifier"
+    private var datasource: RxCollectionViewSectionedAnimatedDataSource<SectionHeroCollectionData>!
+    var viewModel: HeroListViewModel = HeroListViewModel() {
+        didSet {
+            setupSegmentControl()
+            setupCollectionView()
+        }
+    }
     
     // Initialization
-    
-    override func loadView() {
-        setupSegmentControl()
-        setupCollectionView()
-    }
     
     private func setupCollectionView() {
         let bundle = Bundle(for: HeroCollectionCellView.self)
         let nib = UINib(nibName: "HeroCollectionCellView", bundle: bundle)
-
-        collectionView.register(nib, forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.delegate = self
-        viewModel.collectionItems
-            .bind(to: collectionView.rx
-                .items(cellIdentifier: cellIdentifier, cellType: HeroCollectionCellView.self)) { (index, model, cell) in
-                cell.configure(data: model)
+        
+        datasource = RxCollectionViewSectionedAnimatedDataSource<SectionHeroCollectionData>(configureCell: { (datasource, collectionView, indexPath, model) -> UICollectionViewCell in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellIdentifier, for: indexPath) as? HeroCollectionCellView else {
+                return UICollectionViewCell()
             }
+
+            cell.configure(data: model)
+            return cell
+        })
+
+        self.collectionView.register(nib, forCellWithReuseIdentifier: cellIdentifier)
+        self.collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        
+        viewModel.collectionItems
+            .bind(to: collectionView.rx.items(dataSource: datasource))
             .disposed(by: disposeBag)
     }
     

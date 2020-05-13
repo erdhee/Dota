@@ -8,6 +8,8 @@
 
 import Foundation
 import RealmSwift
+import RxRealm
+import RxSwift
 
 class RoleDataService {
     public static let shared: RoleDataService = RoleDataService()
@@ -19,8 +21,9 @@ class RoleDataService {
      * - [RoleObject]
      */
     
-    public func get() -> [RoleObject] {
-        return realm.objects(RoleObject.self)
-            .map({ $0 })
+    public func get() -> Observable<[RoleObject]> {
+        let roles = realm.objects(RoleObject.self)
+        return Observable.collection(from: roles)
+            .map{( $0.map({ $0 }) )}
     }
 }

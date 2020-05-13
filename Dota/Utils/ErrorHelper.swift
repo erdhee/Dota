@@ -14,7 +14,7 @@ class ErrorHelper {
     func getMessage(error: Error) -> String {
         let errorCode: Int = (error as NSError).code
         
-        if (errorCode == NSURLErrorNotConnectedToInternet) {
+        if (errorCode == NSURLErrorNotConnectedToInternet || errorCode == 13) {
             return "Looks like there's a connection issue. Please check your connection."
         } else if (errorCode == NSURLErrorNetworkConnectionLost || errorCode == NSURLErrorTimedOut) {
             return "Looks like your connection is unstable. Please check your connection."

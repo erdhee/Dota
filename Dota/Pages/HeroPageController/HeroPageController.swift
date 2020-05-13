@@ -27,7 +27,7 @@ class HeroPageController: UIViewController {
         super.viewDidLoad()
         
         setupNavbarImage()
-        setupListView()
+        setupChildView()
         setupRx()
     }
     
@@ -37,37 +37,38 @@ class HeroPageController: UIViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
     }
     
-    private func setupListView() {
+    private func setupChildView() {
         listView.viewModel = HeroListViewModel()
+        errorView.output = self
     }
     
     private func setupRx() {
         viewModel.isLoading
             .subscribe(onNext: { [weak self] (isLoading) in
-                self?.resetState()
-                
                 if (isLoading) {
                     self?.showLoading()
+                } else {
+                    self?.loadingView.hide()
                 }
             })
             .disposed(by: disposeBag)
         
         viewModel.error
             .subscribe(onNext: { [weak self] (error) in
-                self?.resetState()
-                
                 if (error != "") {
                     self?.showError(message: error)
+                } else {
+                    self?.errorView.hide()
                 }
             })
             .disposed(by: disposeBag)
         
         viewModel.hasData
             .subscribe(onNext: { [weak self] (hasData) in
-                self?.resetState()
-                
                 if (hasData) {
                     self?.showList()
+                } else {
+                    self?.listView.hide()
                 }
             })
             .disposed(by: disposeBag)
@@ -93,4 +94,12 @@ class HeroPageController: UIViewController {
         resetState()
         listView.show(in: self.view)
     }
+}
+
+extension HeroPageController: HeroListErrorViewOutput {
+    
+    func didTapButton() {
+        viewModel.reload()
+    }
+    
 }

@@ -8,6 +8,8 @@
 
 import Foundation
 import RealmSwift
+import RxSwift
+import RxRealm
 
 class HeroDataService {
     public static let shared: HeroDataService = HeroDataService()
@@ -45,13 +47,14 @@ class HeroDataService {
      * - [HeroObject]
      */
     
-    public func get(role: RoleObject?) -> [HeroObject] {
-        guard let role = role else {
-            return realm.objects(HeroObject.self).map { $0 }
-        }
+    public func get(role: RoleObject?) -> Observable<[HeroObject]> {
+        let heroes = realm.objects(HeroObject.self)
         
-        return role.heroes.map { (hero) -> HeroObject in
-            return hero
+        if let role = role {
+            return Observable.of(role.heroes).map({ $0.map({ $0 }) })
+        } else {
+            return Observable.collection(from: heroes)
+                .map({ $0.map({ $0}) })
         }
     }
     
