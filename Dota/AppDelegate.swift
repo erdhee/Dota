@@ -7,26 +7,11 @@
 //
 
 import UIKit
-import RxSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    let disposeBag: DisposeBag = DisposeBag()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        
-        HeroRepository.shared
-            .getHeroes()
-            .subscribe(onNext: { (heroes) in
-                for hero in heroes {
-                    debugPrint(hero.name ?? "")
-                }
-            }, onError: { (error) in
-                debugPrint(error.localizedDescription)
-            })
-            .disposed(by: disposeBag)
         
         return true
     }

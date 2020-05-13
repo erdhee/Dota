@@ -9,9 +9,11 @@ target 'Dota' do
   pod 'RxCocoa', '~> 5'
   pod 'RealmSwift'
   pod 'SwiftLint'
+  pod 'RxDataSources', '~> 4.0'
+  pod 'SwifterSwift'
+  pod 'Kingfisher', '~> 5.0'
+  pod 'Segmentio'
   pod "RxRealm"
-
-  # Pods for Dota
 
   target 'DotaTests' do
     inherit! :search_paths

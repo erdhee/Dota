@@ -49,6 +49,10 @@ class HeroObject: Object {
         return HeroAttributeType(rawValue: primaryAttr ?? "");
     }
     
+    func getImageUrl() -> URL? {
+        return URL(string: "https://api.opendota.com\(img ?? "")")
+    }
+    
     override static func primaryKey() -> String? {
         return "id"
     }

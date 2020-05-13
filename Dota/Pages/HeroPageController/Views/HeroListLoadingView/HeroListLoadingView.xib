@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HeroListLoadingView" customModule="Dota" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="phN-Id-jQK" id="oSS-PN-pgb"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fFU-ZN-mcM">
+                    <rect key="frame" x="87" y="406" width="240" height="94"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="phN-Id-jQK">
+                            <rect key="frame" x="101.5" y="0.0" width="37" height="37"/>
+                            <color key="color" name="Alto"/>
+                        </activityIndicatorView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2mA-fo-hUw">
+                            <rect key="frame" x="94" y="61" width="52" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" name="Alto"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="phN-Id-jQK" firstAttribute="top" secondItem="fFU-ZN-mcM" secondAttribute="top" id="15C-Wj-Mr4"/>
+                        <constraint firstAttribute="bottom" secondItem="2mA-fo-hUw" secondAttribute="bottom" constant="16" id="ALO-vV-cqR"/>
+                        <constraint firstItem="2mA-fo-hUw" firstAttribute="top" secondItem="phN-Id-jQK" secondAttribute="bottom" constant="24" id="CiL-W7-6tB"/>
+                        <constraint firstItem="phN-Id-jQK" firstAttribute="centerX" secondItem="fFU-ZN-mcM" secondAttribute="centerX" id="VQ4-dC-p0W"/>
+                        <constraint firstItem="2mA-fo-hUw" firstAttribute="centerX" secondItem="phN-Id-jQK" secondAttribute="centerX" id="ZPQ-3Q-Fp6"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" name="Eclipse"/>
+            <constraints>
+                <constraint firstItem="fFU-ZN-mcM" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.57971" id="8ab-ge-RyZ"/>
+                <constraint firstItem="fFU-ZN-mcM" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="AEf-jP-p0z"/>
+                <constraint firstItem="fFU-ZN-mcM" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="fdQ-oo-UVa"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="137.68115942028987" y="152.67857142857142"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="Alto">
+            <color red="0.87099999189376831" green="0.87099999189376831" blue="0.87099999189376831" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Eclipse">
+            <color red="0.2196078431372549" green="0.2196078431372549" blue="0.2196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
